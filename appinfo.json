@@ -1,0 +1,63 @@
+{
+    "appKeys": {
+        "KEY_BATTERY_PHONE": 4,
+        "KEY_LUNAR_DAY": 0,
+        "KEY_LUNAR_MONTH": 1,
+        "KEY_LUNAR_YEAR": 2,
+        "KEY_TIMEZONE": 3
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "nhatlu@gmail.com",
+    "longName": "MyWatch",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "fonts/bb10.ttf",
+                "name": "FONT_BB10_NARROW_30",
+                "type": "font"
+            },
+            {
+                "file": "images/screenshot_01.png",
+                "menuIcon": true,
+                "name": "IMAGE_SCREENSHOT",
+                "type": "png"
+            },
+            {
+                "file": "fonts/UVNConThuy.TTF",
+                "name": "FONT_VN_NARROW_16",
+                "type": "font"
+            },
+            {
+                "file": "images/bluetooth_disabled.png",
+                "name": "IMAGE_BLUETOOTH_DISABLED",
+                "type": "png"
+            },
+            {
+                "file": "images/bluetooth.png",
+                "name": "IMAGE_BLUETOOTH",
+                "type": "png"
+            },
+            {
+                "file": "images/lightning.png",
+                "name": "IMAGE_BATTERY_CHARGE",
+                "type": "png"
+            },
+            {
+                "file": "fonts/DIGITALDREAMNARROW.ttf",
+                "name": "FONT_DIGITALDREAM_NARROW_12",
+                "type": "font"
+            }
+        ]
+    },
+    "sdkVersion": "2",
+    "shortName": "MyWatch",
+    "uuid": "688fe407-d65c-4e8c-ae57-ee7dc3c919c2",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
