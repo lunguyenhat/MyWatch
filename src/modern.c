@@ -4,9 +4,6 @@
 #include "stdlib.h"
 #include "math.h"
 
-#define KEY_LUNAR_DAY 0
-#define KEY_LUNAR_MONTH 1
-#define KEY_LUNAR_YEAR 2
 #define KEY_TIMEZONE 3
 #define KEY_BATTERY_PHONE 4
 
@@ -27,14 +24,6 @@ char num_buffer[10];
 TextLayer *battery_phone_label;
 char battery_phone_buffer[10];
 
-/*TextLayer *lunar_day_label;
-char lunar_day_buffer[10];
-
-TextLayer *lunar_month_label;
-char lunar_month_buffer[64];
-
-TextLayer *lunar_year_label;
-char lunar_year_buffer[64];*/
 
 TextLayer *dktime;
 char dktime_buffer[6];
@@ -51,7 +40,6 @@ static GBitmap *s_connection_bitmap;
 static int16_t battery_percent;
 
 static struct tm *utc_time;
-//static struct tm *lunar_time;
 static int timezone = 7;
 
 static void inbox_received_callback(DictionaryIterator *iter, void *context) {
@@ -96,34 +84,6 @@ static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
   //APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
 }
 
-void lunar(struct tm *t)
-{
-  //ngày AL đầu tháng DL; tháng AL đầu tháng DL; ngày DL của đầu tháng AL;tháng AL của đầu tháng AL; tổng số ngày DL trong tháng.
- 
-  int iYear = 0;
-  
-  for (int a = 0; a <= 10; a++)
-  {
-    if (years[a] == (t->tm_year + 1900))
-    {
-      iYear = a;
-      break;
-    }
-  }
-  
-  int ngay_al_dau_thang_dl = al[iYear][t->tm_mon][0];
-  int thang_al_dau_thang_dl = al[iYear][t->tm_mon][1];
-  int ngay_dl_dau_thang_al = al[iYear][t->tm_mon][2];
-  int thang_al_dau_thang_al = al[iYear][t->tm_mon][3];
-  int so_ngay_dl = al[iYear][t->tm_mon][4];
-  
-  APP_LOG(APP_LOG_LEVEL_INFO, "ngay_al_dau_thang_dl %d", ngay_al_dau_thang_dl);
-  APP_LOG(APP_LOG_LEVEL_INFO, "thang_al_dau_thang_dl %d", thang_al_dau_thang_dl);
-  APP_LOG(APP_LOG_LEVEL_INFO, "ngay_dl_dau_thang_al %d", ngay_dl_dau_thang_al);
-  APP_LOG(APP_LOG_LEVEL_INFO, "thang_al_dau_thang_al %d", thang_al_dau_thang_al);
-  APP_LOG(APP_LOG_LEVEL_INFO, "so_ngay_dl %d", so_ngay_dl);
-}
-
 void send_int(uint8_t key, uint8_t cmd)
 {
     DictionaryIterator *iter;
@@ -145,8 +105,6 @@ static void update_date(struct tm *t)
   // dk time
   strftime(dktime_buffer, sizeof(dktime_buffer), "%R", utc_time);
   text_layer_set_text(dktime, dktime_buffer);
-  
-  lunar(t);
 }
 
 static void hands_update_proc(Layer *layer, GContext *ctx) {
@@ -287,28 +245,6 @@ static void window_load(Window *window) {
   gpath_move_to(minute_arrow, center);
   gpath_move_to(hour_arrow, center);
   
-  // init lunar
-  /*lunar_day_label = text_layer_create(GRect(0, (bounds.size.h - 60), bounds.size.w - 5, 26));
-  text_layer_set_text_color(lunar_day_label, GColorWhite);
-  text_layer_set_background_color(lunar_day_label, GColorClear);
-  text_layer_set_font(lunar_day_label, vn_font);
-  text_layer_set_text_alignment(lunar_day_label, GTextAlignmentRight);
-  layer_add_child(window_layer, text_layer_get_layer(lunar_day_label));
-  
-  lunar_month_label = text_layer_create(GRect(0, (bounds.size.h - 40), bounds.size.w - 5, 26));
-  text_layer_set_text_color(lunar_month_label, GColorWhite);
-  text_layer_set_background_color(lunar_month_label, GColorClear);
-  text_layer_set_font(lunar_month_label, vn_font);
-  text_layer_set_text_alignment(lunar_month_label, GTextAlignmentRight);
-  layer_add_child(window_layer, text_layer_get_layer(lunar_month_label));
-  
-  lunar_year_label = text_layer_create(GRect(0, (bounds.size.h - 20), bounds.size.w - 5, 26));
-  text_layer_set_text_color(lunar_year_label, GColorWhite);
-  text_layer_set_background_color(lunar_year_label, GColorClear);
-  text_layer_set_font(lunar_year_label, vn_font);
-  text_layer_set_text_alignment(lunar_year_label, GTextAlignmentRight);
-  layer_add_child(window_layer, text_layer_get_layer(lunar_year_label));*/
-  
   // init dk time
   dktime = text_layer_create(GRect(5, (bounds.size.h - 20), bounds.size.w - 5, 18));
   text_layer_set_text_color(dktime, GColorWhite);
@@ -332,9 +268,6 @@ static void window_unload(Window *window) {
   
   text_layer_destroy(day_label);
   text_layer_destroy(num_label);
-  /*text_layer_destroy(lunar_day_label);
-  text_layer_destroy(lunar_month_label);
-  text_layer_destroy(lunar_year_label);*/
   text_layer_destroy(dktime);
   text_layer_destroy(battery_phone_label);
   
@@ -367,9 +300,6 @@ static void init(void) {
   day_buffer[0] = '\0';
   num_buffer[0] = '\0';
   dktime_buffer[0] = '\0';
-  /*lunar_day_buffer[0] = '\0';
-  lunar_month_buffer[0] = '\0';
-  lunar_year_buffer[0] = '\0';*/
   battery_phone_buffer[0] = '\0';
   
   battery_percent = 100;
