@@ -185,7 +185,7 @@ static void handle_bluetooth(bool connected) {
   else
   {
     s_connection_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_DISABLED);
-    vibes_double_pulse();
+    vibes_short_pulse();
   }
   
   bitmap_layer_set_bitmap(s_connection_layer, s_connection_bitmap);
