@@ -9,7 +9,6 @@
 
 Window *window;
 GFont date_font;
-GFont vn_font;
 
 Layer *hands_layer;
 Layer *battery_layer;
@@ -186,6 +185,7 @@ static void handle_bluetooth(bool connected) {
   else
   {
     s_connection_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BLUETOOTH_DISABLED);
+    vibes_double_pulse();
   }
   
   bitmap_layer_set_bitmap(s_connection_layer, s_connection_bitmap);
@@ -196,7 +196,6 @@ static void window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
   const GPoint center = grect_center_point(&bounds);
   date_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_DIGITALDREAM_NARROW_12));
-  vn_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_VN_NARROW_16));
  
   // init day
   day_label = text_layer_create(GRect(0, (bounds.size.h - 20), bounds.size.w - 5, 18));
@@ -272,7 +271,6 @@ static void window_unload(Window *window) {
   text_layer_destroy(battery_phone_label);
   
   fonts_unload_custom_font(date_font);
-  fonts_unload_custom_font(vn_font);
   
   bitmap_layer_destroy(s_lightning_layer);
   bitmap_layer_destroy(s_connection_layer);
