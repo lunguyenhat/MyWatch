@@ -4,8 +4,8 @@
 #include "stdlib.h"
 #include "math.h"
 
-#define KEY_TIMEZONE 3
-#define KEY_BATTERY_PHONE 4
+#define KEY_BATTERY_PHONE 0
+#define KEY_BATTERY_PEBBLE 1
 
 Window *window;
 GFont date_font;
@@ -41,6 +41,17 @@ static int16_t battery_percent;
 static struct tm *utc_time;
 static int timezone = 7;
 
+DictionaryIterator *iter;
+
+void send_int(uint8_t key, uint8_t cmd)
+{
+  DictionaryIterator *iter;
+  app_message_outbox_begin(&iter);
+  Tuplet value = TupletInteger(key, cmd);
+  dict_write_tuplet(iter, &value);
+  app_message_outbox_send();
+}
+
 static void inbox_received_callback(DictionaryIterator *iter, void *context) {
   //APP_LOG(APP_LOG_LEVEL_INFO, "Message received!");
   
@@ -64,6 +75,10 @@ static void inbox_received_callback(DictionaryIterator *iter, void *context) {
         snprintf(battery_phone_buffer, sizeof(battery_phone_buffer), "%d%%", value);
         text_layer_set_text(battery_phone_label, battery_phone_buffer);
         break;
+      
+      case KEY_BATTERY_PEBBLE:
+        send_int(0, battery_percent);
+        break;
     }
 
     //Get next
@@ -81,17 +96,6 @@ static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResul
 
 static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
   //APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
-}
-
-void send_int(uint8_t key, uint8_t cmd)
-{
-    DictionaryIterator *iter;
-    app_message_outbox_begin(&iter);
- 
-    Tuplet value = TupletInteger(key, cmd);
-    dict_write_tuplet(iter, &value);
- 
-    app_message_outbox_send();
 }
 
 static void update_date(struct tm *t)
@@ -171,6 +175,7 @@ static void battery_update_proc(Layer *layer, GContext *ctx) {
 static void handle_battery(BatteryChargeState charge_state) {
   battery_percent = charge_state.charge_percent;
   layer_set_hidden(bitmap_layer_get_layer(s_lightning_layer), !charge_state.is_charging);
+  send_int(0, battery_percent);
 }
 
 static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
@@ -315,7 +320,6 @@ static void init(void) {
   utc = now - (timezone * 60 * 60) + 3600;
   utc_time = gmtime(&utc);
   update_date(t);
-  send_int(5, 5);
   
   tick_timer_service_subscribe(SECOND_UNIT, handle_second_tick);
   battery_state_service_subscribe(handle_battery);

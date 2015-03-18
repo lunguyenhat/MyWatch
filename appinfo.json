@@ -1,7 +1,7 @@
 {
     "appKeys": {
-        "KEY_BATTERY_PHONE": 4,
-        "KEY_TIMEZONE": 3
+        "KEY_BATTERY_PEBBLE": 1,
+        "KEY_BATTERY_PHONE": 0
     },
     "capabilities": [
         ""
